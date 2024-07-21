@@ -1,53 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// Filename: index.js
+// Combined code from all files
 
-const App = () => {
-  const fullText = 'Hi, this is Apply.\nCreating mobile apps is now as simple as typing text.\nJust input your idea and press APPLY, and our platform does the rest...';
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, Text, View, Button, ActivityIndicator } from 'react-native';
+import axios from 'axios';
 
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + fullText[index]);
-      setIndex((prev) => {
-        if (prev === fullText.length - 1) {
-          setIsPaused(true);
-          setTimeout(() => {
-            setDisplayedText('');
-            setIndex(0);
-            setIsPaused(false);
-          }, 2000);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [index, isPaused]);
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{displayedText}</Text>
-    </View>
-  );
+const LetterDisplay = ({ letter }) => {
+    return (
+        <View style={letterStyles.box}>
+            <Text style={letterStyles.letter}>{letter}</Text>
+        </View>
+    );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'black',
-    padding: 20,
-  },
-  text: {
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'monospace',
-  },
+const letterStyles = StyleSheet.create({
+    box: {
+        backgroundColor: '#f0f0f0',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        alignItems: 'center',
+    },
+    letter: {
+        fontSize: 100,
+        fontWeight: 'bold',
+    },
 });
 
-export default App;
+export default function App() {
+    const [currentLetter, setCurrentLetter] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+    useEffect(() => {
+        fetchLetter();
+    }, []);
+
+    const fetchLetter = () => {
+        setLoading(true);
+        setTimeout(() => {
+            const randomIndex = Math.floor(Math.random() * letters.length);
+            setCurrentLetter(letters[randomIndex]);
+            setLoading(false);
+        }, 1000);
+    };
+
+    return (
+        <SafeAreaView style={appStyles.container}>
+            {loading ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <>
+                    <LetterDisplay letter={currentLetter} />
+                    <Button title="Next Letter" onPress={fetchLetter} />
+                </>
+            )}
+        </SafeAreaView>
+    );
+}
+
+const appStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
