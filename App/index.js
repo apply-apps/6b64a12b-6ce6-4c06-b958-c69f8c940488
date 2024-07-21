@@ -3,31 +3,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Button, ActivityIndicator } from 'react-native';
-import axios from 'axios';
 
 const LetterDisplay = ({ letter }) => {
     return (
-        <View style={letterStyles.box}>
-            <Text style={letterStyles.letter}>{letter}</Text>
+        <View style={styles.letterBox}>
+            <Text style={styles.letter}>{letter}</Text>
         </View>
     );
 };
-
-const letterStyles = StyleSheet.create({
-    box: {
-        backgroundColor: '#f0f0f0',
-        padding: 20,
-        borderRadius: 10,
-        marginBottom: 20,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        alignItems: 'center',
-    },
-    letter: {
-        fontSize: 100,
-        fontWeight: 'bold',
-    },
-});
 
 export default function App() {
     const [currentLetter, setCurrentLetter] = useState(null);
@@ -48,7 +31,7 @@ export default function App() {
     };
 
     return (
-        <SafeAreaView style={appStyles.container}>
+        <SafeAreaView style={styles.container}>
             {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
@@ -61,11 +44,24 @@ export default function App() {
     );
 }
 
-const appStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    letterBox: {
+        backgroundColor: '#f0f0f0',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        alignItems: 'center',
+    },
+    letter: {
+        fontSize: 100,
+        fontWeight: 'bold',
     },
 });
